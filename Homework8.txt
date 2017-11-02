@@ -1,0 +1,58 @@
+10 Oldest Users in Victoria, BC
+
+SELECT DisplayName, Location, Age from Users
+WHERE (Location like 'Victoria, BC') ORDER BY age DESC
+
+mountaineer2525		Age: 54
+codexmas		Age: 46
+Omid Zamani		Age: 45
+MarcClintDion		Age: 43
+ChalkTalk		Age: 40
+literaphile		Age: 34
+robru			Age: 33
+brandonscript		Age: 32
+logan			Age: 31
+acorscadden		Age: 31
+
+10 Highest Reputation Users in Vic about Javascript Tag
+
+select u.Id [User Link], Reputation, DisplayName, Location, Tags
+from Users u
+join Posts p on p.ownerUserId=u.id
+where Location like '%##Location##%' and tags like '%##tags##%'
+order by Reputation desc
+
+Taken from http://data.stackexchange.com/stackoverflow/query/727387/search-tag-speified-developers-in-the-city
+
+brandsonscript 
+Kevin Sylvestre 
+aardvarkk
+Jonathon Watney
+Bodman
+Matthew Lehner
+mtpultz
+logan
+Tyler Sebastian
+Steve Adams
+
+Top 5 Victoria Developers in Victoria by Accepted Answer
+
+SELECT TOP ##MaxUsers?200##
+        a.OwnerUserId AS [User Link],
+        Count(a.Id) AS [Total Answers],
+        Sum(CASE q.AcceptedAnswerId WHEN a.Id THEN 1 ELSE 0 END) AS [Accepted Answers],  
+        Round(Sum(CASE q.AcceptedAnswerId WHEN a.Id THEN 1 ELSE 0 END) * 100.0 / Count(a.Id), 2) AS [Percentage Accepted],
+        Round(CAST(Sum(CASE q.AcceptedAnswerId WHEN a.Id THEN 1 ELSE 0 END) AS FLOAT) * (CAST(Sum(CASE q.AcceptedAnswerId WHEN a.Id THEN 1 ELSE 0 END) AS FLOAT) / Count(a.Id)), 2) AS Weighting
+FROM    Posts AS a
+   JOIN Posts AS q
+     ON a.ParentId = q.Id
+WHERE
+        a.OwnerUserId = 4014959
+    AND q.postTypeId = 1
+    AND a.postTypeId = 2
+GROUP BY
+        a.OwnerUserId
+ORDER BY
+        Weighting DESC
+
+Taken from http://data.stackexchange.com/stackoverflow/query/645387/answerer-quality-users-with-top-answer-effectiveness-accepted-percentage-times
